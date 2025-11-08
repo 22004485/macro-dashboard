@@ -43,7 +43,7 @@ st.subheader("📌 Key Malaysia Indicators")
 # Replace with your own FRED API Key
 st.warning("Replace YOUR_FRED_API_KEY with your real FRED API key inside the code.")
 
-inflation = get_fred_data("MYCPICOMPQISMEI")   # Malaysia CPI
+inflation = get_fred_data("MYCPIALLMINMEI")   # Malaysia CPI
 gdp = get_fred_data("MYSNGDP")                 # Malaysia GDP
 opr = get_fred_data("IRMMONDTB")               # Interest rate proxy
 
