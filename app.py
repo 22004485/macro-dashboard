@@ -1,17 +1,16 @@
 import streamlit as st
 import yfinance as yf
 import pandas as pd
-from datetime import date, timedelta
 import plotly.express as px
 import requests
 
 # ---------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------
-st.set_page_config(page_title="Malaysia Macro Dashboard", layout="wide")
-st.title("🇲🇾 Malaysia & ASEAN Macroeconomic Dashboard")
+st.set_page_config(page_title="U.S. Macro Dashboard", layout="wide")
+st.title("🇺🇸 United States Macroeconomic Dashboard")
 
-# Your FRED API Key
+# FRED API Key
 FRED_API_KEY = "cc7a4c2477721fc8d59d2f03b849d722"
 
 # ---------------------------------------------------------
@@ -43,14 +42,16 @@ def get_yahoo(symbol, period="1y"):
 # Load Data
 # ---------------------------------------------------------
 
-st.subheader("📌 Key Malaysia Indicators")
+st.subheader("📌 Key U.S. Indicators")
 
-inflation = get_fred_data("MYCPIALLMINMEI")   # Malaysia CPI
-gdp = get_fred_data("MYSNGDP")                # Malaysia GDP
-opr = get_fred_data("IRMMONDTB")              # Interest rate proxy
+# FRED Series IDs
+inflation = get_fred_data("CPIAUCSL")       # Consumer Price Index
+gdp = get_fred_data("GDP")                  # Gross Domestic Product
+interest_rate = get_fred_data("FEDFUNDS")   # Federal Funds Rate
 
-klci = get_yahoo("^KLSE", "1y")
-usdmyr = get_yahoo("MYR=X", "1y")
+# Market Data
+sp500 = get_yahoo("^GSPC", "1y")            # S&P 500 Index
+usdeur = get_yahoo("EURUSD=X", "1y")        # USD/EUR Exchange Rate
 
 # ---------------------------------------------------------
 # Display Charts
@@ -59,27 +60,27 @@ usdmyr = get_yahoo("MYR=X", "1y")
 col1, col2 = st.columns(2)
 
 with col1:
-    st.write("### 🇲🇾 Malaysia Inflation (CPI)")
+    st.write("### 📊 U.S. Inflation (CPI)")
     fig = px.line(inflation, x="date", y="value", labels={"value": "CPI"})
     st.plotly_chart(fig, use_container_width=True)
 
 with col2:
-    st.write("### 🇲🇾 GDP Growth")
-    fig = px.line(gdp, x="date", y="value", labels={"value": "GDP (Billion MYR)"})
+    st.write("### 📈 U.S. GDP")
+    fig = px.line(gdp, x="date", y="value", labels={"value": "GDP (Trillions USD)"})
     st.plotly_chart(fig, use_container_width=True)
 
 col3, col4 = st.columns(2)
 
 with col3:
-    st.write("### 🏦 Interest Rate (OPR Proxy)")
-    fig = px.line(opr, x="date", y="value", labels={"value": "Interest Rate (%)"})
+    st.write("### 🏦 Federal Funds Rate")
+    fig = px.line(interest_rate, x="date", y="value", labels={"value": "Interest Rate (%)"})
     st.plotly_chart(fig, use_container_width=True)
 
 with col4:
-    st.write("### 💵 USD/MYR Exchange Rate")
-    fig = px.line(usdmyr, x="Date", y="Close", labels={"Close": "USD/MYR"})
+    st.write("### 💱 USD/EUR Exchange Rate")
+    fig = px.line(usdeur, x="Date", y="Close", labels={"Close": "USD/EUR"})
     st.plotly_chart(fig, use_container_width=True)
 
-st.write("### 📈 FBM KLCI")
-fig = px.line(klci, x="Date", y="Close", labels={"Close": "KLCI Index"})
+st.write("### 📉 S&P 500 Index")
+fig = px.line(sp500, x="Date", y="Close", labels={"Close": "S&P 500"})
 st.plotly_chart(fig, use_container_width=True)
